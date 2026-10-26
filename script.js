@@ -360,6 +360,7 @@ window.HeroApp = (() => {
     function handleQuizAnswer(idx) {
         const q = quizState.list[quizState.current];
         const isCorrect = (idx === q.ans);
+        generate4CutComicFromQuiz(q, true, comicState.current4CutData.chars);
 
         document.getElementById('quiz-card-content').classList.add('hidden');
         const fb = document.getElementById('quiz-feedback');
@@ -402,11 +403,12 @@ window.HeroApp = (() => {
         `;
     }
 
-    function generate4CutComicFromQuiz(q) {
-        const char1 = FACE_CHARACTERS[Math.floor(Math.random() * FACE_CHARACTERS.length)];
-        let char2 = FACE_CHARACTERS[Math.floor(Math.random() * FACE_CHARACTERS.length)];
+    function generate4CutComicFromQuiz(q, revealed = false, chars = null) {
+        const char1 = chars ? chars[0] : FACE_CHARACTERS[Math.floor(Math.random() * FACE_CHARACTERS.length)];
+        let char2 = chars ? chars[1] : FACE_CHARACTERS[Math.floor(Math.random() * FACE_CHARACTERS.length)];
 
         comicState.current4CutData = {
+            chars: [char1, char2],
             title: `📖 ${char1.name}와 ${char2.name}의 ${q.name} 동화 이야기`,
             cuts: [
                 {
@@ -424,13 +426,13 @@ window.HeroApp = (() => {
                 {
                     cutNum: 3,
                     char: char1,
-                    speech: `정답은 '${q.opts[q.ans]}' ! 깔끔하게 배출 완료!`,
+                    speech: revealed ? `정답은 '${q.opts[q.ans]}' ! 깔끔하게 배출 완료!` : `문제를 풀면 정답을 알려줄게! 두근두근~`,
                     desc: `히어로가 분리수거를 멋지게 해냈어요.`
                 },
                 {
                     cutNum: 4,
                     char: char2,
-                    speech: `지구를 지켜줘서 고마워! ${q.exp}`,
+                    speech: revealed ? `지구를 지켜줘서 고마워! ${q.exp}` : `정답을 맞혀 보면 이야기가 이어져요!`,
                     desc: `친구들이 다 함께 기뻐해요!`
                 }
             ]
