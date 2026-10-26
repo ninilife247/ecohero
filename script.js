@@ -897,6 +897,15 @@ window.HeroApp = (() => {
         });
     }
 
+    function claimScanExp(btn) {
+        if (btn.disabled) return;
+        btn.disabled = true;
+        btn.className = "w-full bg-slate-600 text-slate-300 font-bold hero-font text-lg py-3 rounded-xl cursor-not-allowed flex items-center justify-center gap-2";
+        btn.innerHTML = "<span>경험치를 받았어요! ✨</span>";
+        addExp(20);
+        showAlert('기후행동 완료! 🎉', '탄소를 아끼고 소나무를 심어주셔서 감사해요! +20 EXP');
+    }
+
     function renderScanResult(key, isTrash) {
         const guide = WASTE_GUIDE_DB[key] || WASTE_GUIDE_DB["plastic"];
         const resultBox = document.getElementById('scanner-result');
@@ -976,7 +985,7 @@ window.HeroApp = (() => {
                     </div>
                 </div>
 
-                <button onclick="HeroApp.addExp(20); HeroApp.showAlert('기후행동 완료! 🎉', '탄소를 아끼고 소나무를 심어주셔서 감사해요! +20 EXP');" class="btn-hover-effect w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold hero-font text-lg py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                <button onclick="HeroApp.claimScanExp(this)" class="btn-hover-effect w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold hero-font text-lg py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
                     <span>실천 완료하고 경험치 받기</span> <i class="fa-solid fa-bolt"></i>
                 </button>
             </div>
@@ -1019,6 +1028,7 @@ window.HeroApp = (() => {
         handleImageUpload,
         startAiScan,
         setScanResultTab,
+        claimScanExp,
         setQuizCategory,
         startQuiz,
         nextQuizQuestion,
