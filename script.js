@@ -808,7 +808,19 @@ window.HeroApp = (() => {
         renderSchoolRanking();
     }
 
+    const alertQueue = [];
+    let isAlertOpen = false;
+
     function showAlert(title, desc) {
+        alertQueue.push({ title, desc });
+        if (!isAlertOpen) openNextAlert();
+    }
+
+    function openNextAlert() {
+        const next = alertQueue.shift();
+        if (!next) return;
+        isAlertOpen = true;
+        const { title, desc } = next;
         document.getElementById('alert-title').innerText = title;
         document.getElementById('alert-desc').innerText = desc;
         const modal = document.getElementById('alert-modal');
@@ -825,7 +837,11 @@ window.HeroApp = (() => {
         const content = document.getElementById('alert-content');
         modal.classList.add('opacity-0');
         content.classList.add('scale-95');
-        setTimeout(() => modal.classList.add('hidden'), 300);
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            isAlertOpen = false;
+            openNextAlert();
+        }, 300);
     }
 
     function openAvatarModal() {
