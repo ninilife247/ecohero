@@ -177,6 +177,14 @@
 
     <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8">
 
+        <!-- 모바일 전용 게임 고르기 (아케이드 화면에서만 보임) -->
+        <div id="mobile-game-menu" class="md:hidden hidden grid grid-cols-2 gap-2 mb-6">
+            <button type="button" id="mobile-game-quiz" onclick="HeroApp.selectGame('quiz')" class="mobile-game-btn py-2.5 rounded-xl text-xs font-bold hero-font border border-emerald-200 bg-white text-slate-700">🎮 퀴즈 & 시어터</button>
+            <button type="button" id="mobile-game-ox" onclick="HeroApp.selectGame('ox')" class="mobile-game-btn py-2.5 rounded-xl text-xs font-bold hero-font border border-emerald-200 bg-white text-slate-700">⭕ O / X 퀴즈</button>
+            <button type="button" id="mobile-game-catch" onclick="HeroApp.selectGame('catch')" class="mobile-game-btn py-2.5 rounded-xl text-xs font-bold hero-font border border-emerald-200 bg-white text-slate-700">🧺 Catch Catch</button>
+            <button type="button" id="mobile-game-survival" onclick="HeroApp.selectGame('survival')" class="mobile-game-btn py-2.5 rounded-xl text-xs font-bold hero-font border border-emerald-200 bg-white text-slate-700">🔥 분리수거 서바이벌</button>
+        </div>
+
         <!-- HOME VIEW -->
         <section id="view-home" class="tab-view active space-y-10">
             <div class="glass-card rounded-[2rem] p-8 sm:p-12 relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 border-emerald-100">

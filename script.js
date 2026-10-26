@@ -218,6 +218,16 @@ window.HeroApp = (() => {
             activeBtn.classList.add('text-emerald-600', 'bg-emerald-50', 'font-extrabold');
         }
 
+        const isGameTab = ['quiz', 'ox', 'catch', 'survival'].includes(tabId);
+        document.getElementById('mobile-game-menu').classList.toggle('hidden', !isGameTab);
+        document.querySelectorAll('.mobile-game-btn').forEach(btn => {
+            const isActive = (btn.id === `mobile-game-${tabId}`);
+            btn.classList.toggle('bg-emerald-500', isActive);
+            btn.classList.toggle('text-white', isActive);
+            btn.classList.toggle('bg-white', !isActive);
+            btn.classList.toggle('text-slate-700', !isActive);
+        });
+
         if (tabId === 'ecoguide') filterEcoGuide('all');
         else window.scrollTo({ top: 0, behavior: 'smooth' });
     }
