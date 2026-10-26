@@ -4,6 +4,8 @@ window.HeroApp = (() => {
         level: 1,
         missionsCompleted: 0,
         nickname: '초록이 히어로',
+        avatar: '🦸‍♂️',
+        completedMissions: [],
         currentTab: 'home',
         activeScanTab: 'how',
         activeEcoCategory: 'all',
@@ -669,6 +671,41 @@ window.HeroApp = (() => {
         { id: 3, title: "점심 남기지 않고 잔반 0 달성하기", desc: "음식물 쓰레기를 줄이면 지구를 구해요!", exp: 25 }
     ];
 
+    const STORAGE_KEY = 'ecohero-save-v1';
+
+    function saveState() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                exp: state.exp,
+                missionsCompleted: state.missionsCompleted,
+                completedMissions: state.completedMissions,
+                nickname: state.nickname,
+                avatar: state.avatar
+            }));
+        } catch (e) {}
+    }
+
+    function loadState() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            if (!saved) return;
+            state.exp = Number(saved.exp) || 0;
+            state.completedMissions = Array.isArray(saved.completedMissions) ? saved.completedMissions : [];
+            state.missionsCompleted = state.completedMissions.length;
+            state.nickname = saved.nickname || state.nickname;
+            state.avatar = saved.avatar || state.avatar;
+        } catch (e) {}
+
+        for (let i = LEVELS.length - 1; i >= 0; i--) {
+            if (state.exp >= LEVELS[i].exp) { state.level = i + 1; break; }
+        }
+        document.getElementById('hero-level-badge').innerText = `Lv. ${state.level} ${LEVELS[state.level - 1].title}`;
+        document.getElementById('hero-nickname-input').value = state.nickname;
+        document.getElementById('header-hero-name').innerText = state.nickname;
+        document.getElementById('main-avatar-icon').innerText = state.avatar;
+        document.getElementById('header-avatar-emoji').innerText = state.avatar;
+    }
+
     function renderMissions() {
         const list = document.getElementById('mission-list');
         if(!list) return;
@@ -681,11 +718,14 @@ window.HeroApp = (() => {
                     </div>
                     <p class="text-xs text-slate-500 font-bold">${m.desc}</p>
                 </div>
-                <button onclick="HeroApp.completeMission(${m.id}, ${m.exp}, this)" class="shrink-0 hero-font bg-emeraldHero text-white px-5 py-2.5 rounded-xl hover:bg-emerald-600 transition shadow-md text-sm">
+                ${state.completedMissions.includes(m.id)
+                    ? `<button type="button" disabled class="shrink-0 hero-font bg-slate-300 text-slate-600 px-5 py-2.5 rounded-xl cursor-not-allowed text-sm">완료됨! ✨</button>`
+                    : `<button onclick="HeroApp.completeMission(${m.id}, ${m.exp}, this)" class="shrink-0 hero-font bg-emeraldHero text-white px-5 py-2.5 rounded-xl hover:bg-emerald-600 transition shadow-md text-sm">
                     미션 완료 (+${m.exp} EXP)
-                </button>
+                </button>`}
             </div>
         `).join('');
+        document.getElementById('mission-progress-text').innerText = `${state.missionsCompleted} / ${MISSIONS_DB.length}`;
     }
 
     function completeMission(id, exp, btn) {
@@ -694,6 +734,7 @@ window.HeroApp = (() => {
         btn.innerText = "완료됨! ✨";
         btn.className = "shrink-0 hero-font bg-slate-300 text-slate-600 px-5 py-2.5 rounded-xl cursor-not-allowed text-sm";
 
+        state.completedMissions.push(id);
         state.missionsCompleted++;
         addExp(exp);
 
@@ -726,6 +767,7 @@ window.HeroApp = (() => {
 
     function addExp(amount) {
         state.exp += amount;
+        saveState();
         updateUI();
         checkLevelUp();
     }
@@ -866,6 +908,8 @@ window.HeroApp = (() => {
     }
 
     function selectEmojiAvatar(emoji) {
+        state.avatar = emoji;
+        saveState();
         document.getElementById('main-avatar-icon').innerText = emoji;
         document.getElementById('main-avatar-img').classList.add('hidden');
         document.getElementById('main-avatar-icon').classList.remove('hidden');
@@ -1045,12 +1089,14 @@ window.HeroApp = (() => {
         if(nameInput) {
             nameInput.addEventListener('input', (e) => {
                 state.nickname = e.target.value || '초록이 히어로';
+                saveState();
                 const headerName = document.getElementById('header-hero-name');
                 if(headerName) headerName.innerText = state.nickname;
                 updateRanking();
             });
         }
 
+        loadState();
         filterEcoGuide('all');
         renderMissions();
         startQuiz();
