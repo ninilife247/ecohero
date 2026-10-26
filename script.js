@@ -426,6 +426,9 @@ window.HeroApp = (() => {
     function generate4CutComicFromQuiz(q, revealed = false, chars = null) {
         const char1 = chars ? chars[0] : FACE_CHARACTERS[Math.floor(Math.random() * FACE_CHARACTERS.length)];
         let char2 = chars ? chars[1] : FACE_CHARACTERS[Math.floor(Math.random() * FACE_CHARACTERS.length)];
+        while (!chars && char2 === char1) {
+            char2 = FACE_CHARACTERS[Math.floor(Math.random() * FACE_CHARACTERS.length)];
+        }
 
         comicState.current4CutData = {
             chars: [char1, char2],
