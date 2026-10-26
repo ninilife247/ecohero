@@ -550,10 +550,10 @@ window.HeroApp = (() => {
 
         if (comicState.isPlayingFullVoice) {
             btnIcon.className = 'fa-solid fa-circle-pause text-xl animate-pulse';
-            btnText.innerText = '동화 일시정지하기';
+            btnText.innerText = '동화 그만 듣기';
         } else {
             btnIcon.className = 'fa-solid fa-circle-play text-xl';
-            btnText.innerText = '동화 전체 구독하기 (처음부터 끝까지 듣기)';
+            btnText.innerText = '동화 전체 듣기 (처음부터 끝까지 듣기)';
         }
     }
 
