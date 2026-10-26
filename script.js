@@ -249,6 +249,16 @@ window.HeroApp = (() => {
     function filterEcoGuide(category) {
         state.activeEcoCategory = category;
 
+        document.querySelectorAll('[id^="ecoguide-subtab-"]').forEach(btn => {
+            if (btn.id === 'ecoguide-subtab-web') return;
+            const isActive = (btn.id === `ecoguide-subtab-${category}`);
+            btn.classList.toggle('bg-emerald-500', isActive);
+            btn.classList.toggle('text-white', isActive);
+            btn.classList.toggle('border-emerald-500', isActive);
+            btn.classList.toggle('bg-white', !isActive);
+            btn.classList.toggle('text-slate-700', !isActive);
+        });
+
         const cardsBox = document.getElementById('ecoguide-cards-container');
         const iframeBox = document.getElementById('ecoguide-iframe-container');
         const searchBox = document.getElementById('ecoguide-search-box');
@@ -576,6 +586,10 @@ window.HeroApp = (() => {
 
     function setOxCategory(categoryKey) {
         state.activeOxCategory = categoryKey;
+        const onCls = "flex-1 py-3 px-5 rounded-xl font-bold hero-font text-base transition-all bg-emerald-500 text-white shadow-md flex items-center justify-center gap-2";
+        const offCls = "flex-1 py-3 px-5 rounded-xl font-bold hero-font text-base transition-all text-slate-600 hover:text-emerald-700 flex items-center justify-center gap-2";
+        document.getElementById('ox-subtab-recycle').className = (categoryKey === 'recycle') ? onCls : offCls;
+        document.getElementById('ox-subtab-carbon').className = (categoryKey === 'carbon') ? onCls : offCls;
         startOxQuiz();
     }
 
