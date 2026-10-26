@@ -516,7 +516,7 @@ window.HeroApp = (() => {
         const textToSpeak = cut.speech;
         const utterance = new SpeechSynthesisUtterance(textToSpeak);
         utterance.lang = 'ko-KR';
-        utterance.pitch = 3.5;
+        utterance.pitch = 2;
         utterance.rate = 1.5;
 
         utterance.onend = () => { stopSoftBgm(); };
