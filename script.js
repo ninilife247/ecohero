@@ -831,6 +831,10 @@ window.HeroApp = (() => {
         `;
     }
 
+    function escapeHtml(text) {
+        return String(text).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    }
+
     function updateRanking() {
         const container = document.getElementById('ranking-container');
         if (!container) return;
@@ -845,7 +849,7 @@ window.HeroApp = (() => {
             <div class="bg-white rounded-2xl p-5 shadow-md border ${i === 0 ? 'border-amber-300 bg-gradient-to-b from-amber-50 to-white scale-105' : 'border-slate-200'} w-full md:w-1/3 text-center transition-transform">
                 <div class="text-3xl mb-1">${r.emoji}</div>
                 <div class="font-bold text-slate-800 text-lg mb-0.5 hero-font">${i + 1}위</div>
-                <div class="text-slate-800 text-base mb-2 font-bold truncate hero-font">${r.name}</div>
+                <div class="text-slate-800 text-base mb-2 font-bold truncate hero-font">${escapeHtml(r.name)}</div>
                 <div class="text-emerald-600 font-bold hero-font text-xl">${r.score} EXP</div>
             </div>
         `).join('');
